@@ -9,6 +9,18 @@ extension NSMutableData {
 }
 class CollectionViewSample: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    @IBAction func uploadAFNetworkingButton(sender: AnyObject) {
+        let camera = UIImagePickerControllerSourceType.PhotoLibrary
+        
+        if UIImagePickerController.isSourceTypeAvailable(camera) {
+            
+            let picker = UIImagePickerController()
+            picker.sourceType = camera
+            picker.delegate = self
+            self.presentViewController(picker, animated: true, completion: nil)
+        }
+        
+    }
     @IBAction func uploadButton(sender: AnyObject) {
         let camera = UIImagePickerControllerSourceType.PhotoLibrary
         
@@ -41,15 +53,52 @@ class CollectionViewSample: UIViewController, UIImagePickerControllerDelegate, U
             let image = info[UIImagePickerControllerOriginalImage] as! UIImage
             //iamgeForUploadというUIImageを用意しておいてそこに一旦預ける
             self.imageForUpload.image = image
-            self.myImageUploadRequest()
+            self.AFNetworkingUploadRequest()
+//            self.myImageUploadRequest()
         }
         picker.dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    func AFNetworkingUploadRequest() {
+//        let url = "http://dsh4k2h4k2.esy.es/uploadTest2.php"
+        let url = "http://test.localhost/uploadTest4.php"
+        let parameters: Dictionary<String,AnyObject> = ["userId": "12345"] // 画像以外に送りたいパラメータ
+        let images: Dictionary<String,UIImage> = ["file": self.imageForUpload.image!] // 画像データ
+        
+        // Basic認証の情報
+        let user = "user"
+        let pass = "pass"
+        
+        let manager: AFHTTPSessionManager = AFHTTPSessionManager()
+//        manager.requestSerializer.setAuthorizationHeaderFieldWithUsername(user, password: pass)
+        manager.responseSerializer = AFHTTPResponseSerializer()
+
+        manager.POST(url, parameters: parameters, constructingBodyWithBlock: { (data) in
+            // 画像データを追加
+            // htmlの<input type="file" ・・・>の部分
+            for (key, value) in images
+            {
+                let name = key
+                let imageData = NSData(data: UIImageJPEGRepresentation(value, 1)!)
+                data.appendPartWithFileData(imageData, name: name, fileName: name, mimeType: "image/jpeg")
+            }
+            }, success: { (operation: NSURLSessionDataTask!, responsobject:AnyObject!) in
+                // アップロード成功時の処理
+                print("アップロード成功")
+                print(operation)
+                print(responsobject)
+            }, failure: { (operation, error) in
+                // アップロード失敗時の処理
+                print("アップロード失敗")
+                print(error)
+        })
         
     }
     //画像のアップロード処理
     func myImageUploadRequest(){
         //myUrlには自分で用意したphpファイルのアドレスを入れる
-        let myUrl = NSURL(string:"http://dsh4k2h4k2.esy.es/uploadTest2.php")
+        let myUrl = NSURL(string:"http://test.localhost/uploadTest4.php")
+//        let myUrl = NSURL(string:"http://dsh4k2h4k2.esy.es/uploadTest4.php")
         let request = NSMutableURLRequest(URL:myUrl!)
         request.HTTPMethod = "POST"
         //下記のパラメータはあくまでもPOSTの例
@@ -113,6 +162,19 @@ class CollectionViewSample: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     
+    
+//    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+//        
+//        if info[UIImagePickerControllerOriginalImage] != nil {
+//            let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+//            //iamgeForUploadというUIImageを用意しておいてそこに一旦預ける
+//            self.imageForUpload.image = image
+//            self.AFNetworkingUploadRequest()
+//        }
+//        picker.dismissViewControllerAnimated(true, completion: nil)
+//        
+//    }
+    
 }
 
 
@@ -169,3 +231,4 @@ class CollectionViewSample: UIViewController, UIImagePickerControllerDelegate, U
 //    }
 
 //}
+    

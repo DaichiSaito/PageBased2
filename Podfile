@@ -1,4 +1,4 @@
-platform :ios, '7.0'
-pod 'AFNetworking', "~> 2.2.4"
+platform :ios, '8.0'
+pod 'AFNetworking', "~> 2.3.0"
 pod 'JSONKit-NoWarning', '~> 1.2'
 pod 'DAPagesContainer'

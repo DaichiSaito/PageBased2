@@ -24,6 +24,13 @@
                                     <action selector="uploadButton:" destination="uKE-wz-X7t" eventType="touchUpInside" id="qrh-dE-aG2"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="acq-SH-BRk">
+                                <rect key="frame" x="192" y="413" width="217" height="30"/>
+                                <state key="normal" title="AFNetworkingでのアップロード"/>
+                                <connections>
+                                    <action selector="uploadAFNetworkingButton:" destination="uKE-wz-X7t" eventType="touchUpInside" id="eas-Cz-FWh"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>

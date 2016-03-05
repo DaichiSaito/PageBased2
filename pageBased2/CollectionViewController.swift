@@ -37,7 +37,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! MyCollectionViewCell
         let url = NSURL(string: data[indexPath.row])
         let placeholder = UIImage(named: "transparent.png")
-        cell.image!.setImageWithURL(url, placeholderImage: placeholder)
+        cell.image!.setImageWithURL(url!, placeholderImage: placeholder)
         return cell
     }
     
