@@ -70,7 +70,7 @@ class CollectionViewSample: UIViewController, UIImagePickerControllerDelegate, U
         let pass = "pass"
         
         let manager: AFHTTPSessionManager = AFHTTPSessionManager()
-//        manager.requestSerializer.setAuthorizationHeaderFieldWithUsername(user, password: pass)
+        manager.requestSerializer.setAuthorizationHeaderFieldWithUsername(user, password: pass)
         manager.responseSerializer = AFHTTPResponseSerializer()
 
         manager.POST(url, parameters: parameters, constructingBodyWithBlock: { (data) in
@@ -79,8 +79,9 @@ class CollectionViewSample: UIViewController, UIImagePickerControllerDelegate, U
             for (key, value) in images
             {
                 let name = key
+                let fileName = name + ".jpg"
                 let imageData = NSData(data: UIImageJPEGRepresentation(value, 1)!)
-                data.appendPartWithFileData(imageData, name: name, fileName: name, mimeType: "image/jpeg")
+                data.appendPartWithFileData(imageData, name: name, fileName: fileName, mimeType: "image/jpeg")
             }
             }, success: { (operation: NSURLSessionDataTask!, responsobject:AnyObject!) in
                 // アップロード成功時の処理
@@ -139,6 +140,7 @@ class CollectionViewSample: UIViewController, UIImagePickerControllerDelegate, U
         let filename = "user-profile1.jpg"
         let mimetype = "image/jpg"
         body.appendString("--\(boundary)\r\n")
+        // filePathKeyという識別しに対応するのがfilenameという変数
         body.appendString("Content-Disposition: form-data; name=\"\(filePathKey!)\"; filename=\"\(filename)\"\r\n")
         body.appendString("Content-Type: \(mimetype)\r\n\r\n")
         body.appendData(imageDataKey)
